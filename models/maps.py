@@ -1,5 +1,6 @@
 import math
 
+from models.colonies import Colony
 from models.constants import GameConstants
 
 
@@ -10,6 +11,7 @@ class Map:
         self.height = GameConstants.SCREEN_HEIGHT
         self.width = GameConstants.SCREEN_WIDTH
         self.sprites = []
+        self.colony = Colony(map=self)
 
     def add_sprite(self, sprite):
         self.sprites.append(sprite)
@@ -24,6 +26,17 @@ class Map:
             if object.x_pos == x and object.y_pos == y:
                 return object
         return None
+
+    def get_nearest_object_by_type(self, object, type):
+        smallest_distance = None
+        nearest_object = None
+        objects_to_check = [object for object in self.sprites if object.__class__.__name__ == type]
+        for each in objects_to_check:
+            distance = self.get_distance_between_objects(object, each)
+            if not smallest_distance or distance < smallest_distance:
+                smallest_distance = distance
+                nearest_object = each
+        return nearest_object
 
     @staticmethod
     def get_distance_between_objects(one, two):

@@ -15,6 +15,8 @@ class Ant(Sprite):
         self.speed = 0.5
         self.vision = 300
 
+        self.hunger = 0
+
     def move(self):
         if self.destination_coordinates:
             if self.x_pos == self.destination_coordinates[0] and self.y_pos == self.destination_coordinates[1]:
@@ -24,6 +26,7 @@ class Ant(Sprite):
         else:
             self.direction += random.randint(-1, 1)
         self.image = pygame.transform.rotate(self.original_image, int(self.direction)+270)
+        self.hunger += 1
 
 
 # class Queen(Ant):

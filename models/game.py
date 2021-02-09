@@ -1,10 +1,11 @@
+from random import randint
+
 import pygame
 import sys
 
 from models.constants import GameConstants
-from models.foods import Leaf
 from models.maps import Map
-from models.players import Player
+from models.foods import Leaf
 
 
 class Game:
@@ -16,18 +17,17 @@ class Game:
         self.bg_color = pygame.Color("white")
         self.all_sprites = pygame.sprite.Group()
 
-        self.player = Player(game=self)
-
         self.map = Map(game=self)
 
         for i in range(10):
             leaf = Leaf()
             self.map.add_sprite(leaf)
 
-    def handle_events(self):
+    @staticmethod
+    def handle_events():
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
-            self.player.key_press("a")
+            print(f"You have pressed the 'a' key.")
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -38,22 +38,19 @@ class Game:
         pygame.display.update()
         self.clock.tick(120)
 
-        for ant in self.player.colony.ants:
-            minimum_distance = 50000
-            target_leaf = None
-            for object in self.map.sprites:
-                if object.__class__.__name__ != "Leaf":
-                    continue
-                distance = self.map.get_distance_between_objects(ant, object)
-                if distance < minimum_distance:
-                    minimum_distance = distance
-                    target_leaf = object
-            if minimum_distance <= ant.vision:
-                ant.destination_coordinates = (target_leaf.x_pos, target_leaf.y_pos)
-                if minimum_distance <= 10:
-                    self.map.remove_sprite(target_leaf)
-            else:
+        for ant in self.map.colony.ants:
+            nearest_leaf = self.map.get_nearest_object_by_type(ant, "Leaf")
+            distance_to_nearest_leaf = self.map.get_distance_between_objects(ant, nearest_leaf)
+            if distance_to_nearest_leaf <= 10:  # The ant is close enough to simply eat the leaf
+                self.map.remove_sprite(nearest_leaf)
+                ant.hunger = 0
+            elif distance_to_nearest_leaf <= ant.vision:  # The ant is close enough to see the leaf
+                ant.destination_coordinates = (nearest_leaf.x_pos, nearest_leaf.y_pos)
+            else:  # The ant can't see any leaf. It has no specific destination
                 ant.destination_coordinates = None
+
+            if randint(0, 100) == 100:
+                print(f"Ant is at {ant.hunger} hunger.")
 
     def draw(self):
         self.screen.fill(self.bg_color)
