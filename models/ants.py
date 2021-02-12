@@ -15,6 +15,9 @@ class Ant(Sprite):
         self.speed = 0.5
         self.vision = 300
 
+        # Experimenting with collisions
+        self.id = random.randint(1, 1000)
+
         self.hunger = 0
 
     def move(self):
@@ -27,6 +30,13 @@ class Ant(Sprite):
             self.direction += random.randint(-1, 1)
         self.image = pygame.transform.rotate(self.original_image, int(self.direction)+270)
         self.hunger += 1
+
+    def collide(self, object):
+        if object.__class__.__name__ == "Leaf":
+            self.hunger = 0
+        elif object.__class__.__name__ == "Worker":
+            self.speed = 0
+
 
 
 # class Queen(Ant):

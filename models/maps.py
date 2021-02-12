@@ -1,15 +1,15 @@
 import math
 
 from models.colonies import Colony
-from models.constants import GameConstants
+from models.constants import Graphics
 
 
 class Map:
     def __init__(self, game):
         self.game = game
         self.name = "world_1"
-        self.height = GameConstants.SCREEN_HEIGHT
-        self.width = GameConstants.SCREEN_WIDTH
+        self.height = Graphics.SCREEN_HEIGHT
+        self.width = Graphics.SCREEN_WIDTH
         self.sprites = []
         self.colony = Colony(map=self)
 
@@ -40,5 +40,8 @@ class Map:
 
     @staticmethod
     def get_distance_between_objects(one, two):
-        return math.hypot(one.x_pos - two.x_pos, one.y_pos - two.y_pos)
+        try:
+            return math.hypot(one.x_pos - two.x_pos, one.y_pos - two.y_pos)
+        except AttributeError as e:
+            print(f"Error calculating distance between two objects. {e}. Objects are {one} and {two}.")
 

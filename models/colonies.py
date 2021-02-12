@@ -5,7 +5,7 @@ class Colony:
     def __init__(self, map):
         self.map = map
         self.ants = []
-        for i in range(1):
+        for i in range(3):
             self.birth_ant()
 
     def birth_ant(self):
