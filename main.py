@@ -1,7 +1,7 @@
-from models.game import Game
+from seeds import game
 
 if __name__ == "__main__":
-    game = Game()
+    game = game
     while True:
         game.handle_events()  # Check for key presses and handle logic per frame
         game.update()  # Move the sprites to new locations

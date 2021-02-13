@@ -17,7 +17,6 @@ class Sprite(pygame.sprite.Sprite):
         self.speed = 0
         self.vision = 0  # Pixels away it can detect things
         self.destination_coordinates = None  # Where sprite is trying to move to (if set, will overwrite direction)
-        self.dying = False  # While dying, the sprite may change
 
     def initialize(self):
         self.rect = self.original_image.get_rect()
