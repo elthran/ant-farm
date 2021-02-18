@@ -2,6 +2,7 @@ import pygame
 import sys
 
 from models.constants import Graphics
+from models.users import User
 
 
 class Game:
@@ -12,20 +13,20 @@ class Game:
         self.bg_color = pygame.Color("white")
         self.all_sprites = pygame.sprite.Group()
         self.map = None
-        self.display_screen_surface = None
+        self.user = User()
 
+        self.display_screen_surface = None
         self.display_screen = pygame.font.SysFont('Comic Sans MS', 45)
 
-    @staticmethod
-    def handle_events():
-        keys = pygame.key.get_pressed()
-        # Keyboard Handling + User preferences should dictate the events that then get processed below
-        if keys[pygame.K_a]:
-            print(f"You have pressed the 'a' key.")
+    def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                self.user.keyboard_mapping.key_change(event.key, "pressed")
+            elif event.type == pygame.KEYUP:
+                self.user.keyboard_mapping.key_change(event.key, "released")
 
     def update(self):
         self.all_sprites.update()
