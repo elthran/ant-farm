@@ -46,3 +46,7 @@ class Map:
         except AttributeError as e:
             print(f"Error calculating distance between two objects. {e}. Objects are {one} and {two}.")
 
+    def update(self):
+        for colony in self.colonies:
+            colony.update()
+
